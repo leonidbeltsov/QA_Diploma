@@ -43,7 +43,7 @@ public class BuyByCardPage {
         return notificationOK.isDisplayed();
     }
 
-    public void setNotificationErrorIsVisible() {
+    public void notificationErrorIsVisible() {
         notificationError.shouldBe(visible, Duration.ofSeconds(15));
     }
 

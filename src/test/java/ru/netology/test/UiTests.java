@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class MyTest {
+public class UiTests {
 
     Card approvedCard = DataGenerator.getApprovedCard();
     Card declinedCard = DataGenerator.getDeclinedCard();
@@ -35,7 +35,6 @@ public class MyTest {
     void setUp() {
         Configuration.headless = true;
         open("http://localhost:8080/");
-
     }
 
     @Test
@@ -49,12 +48,32 @@ public class MyTest {
     }
 
     @Test
+    @DisplayName("declined with declined card")
+    public void shouldBeDeclinedBuyWithDeclinedCard() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BuyByCardPage buyByCard = dashboardPage.openBuyByCardPage();
+        buyByCard.fillForm(declinedCard);
+        buyByCard.notificationErrorIsVisible();
+        assertFalse(buyByCard.notificationOkIsDisplayed());
+    }
+
+    @Test
     @DisplayName("credit approval with approved card")
     public void shouldBuyInCreditWithApprovedCard() {
         DashboardPage dashboardPage = new DashboardPage();
         BuyInCreditPage buyInCredit = dashboardPage.openBuyInCreditPage();
-        buyInCredit.fillForm(declinedCard);
+        buyInCredit.fillForm(approvedCard);
         buyInCredit.notificationOkIsVisible();
+        assertFalse(buyInCredit.notificationErrorIsDisplayed());
+    }
+
+    @Test
+    @DisplayName("credit declined with declined card")
+    public void shouldBeNotApprovedWhitDeclinedCard() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BuyInCreditPage buyInCredit = dashboardPage.openBuyInCreditPage();
+        buyInCredit.fillForm(declinedCard);
+        buyInCredit.notificationErrorIsVisible();
         assertFalse(buyInCredit.notificationOkIsDisplayed());
     }
 

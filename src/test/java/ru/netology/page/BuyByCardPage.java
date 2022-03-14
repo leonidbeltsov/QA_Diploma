@@ -18,12 +18,17 @@ public class BuyByCardPage {
     private SelenideElement holderField = $(byText("Владелец")).parent().$(".input__control");
     private SelenideElement cvcField = $(byText("CVC/CVV")).parent().$(".input__control");
     private SelenideElement continueButton = $$("button").find(exactText("Продолжить"));
+    private SelenideElement notification = $(".notification__title");
     private SelenideElement notificationOK = $(".notification_status_ok");
     private SelenideElement notificationError = $(".notification_status_error");
     private SelenideElement inputInvalid = $(".input__sub");
 
     public BuyByCardPage() {
         heading.shouldBe(visible);
+    }
+
+    public void notificationIsVisible() {
+        notification.shouldBe(visible, Duration.ofSeconds(15));
     }
 
     public void fillForm(Card card) {
@@ -36,19 +41,11 @@ public class BuyByCardPage {
     }
 
     public void notificationOkIsVisible() {
-        notificationOK.shouldBe(visible, Duration.ofSeconds(15));
-    }
-
-    public boolean notificationOkIsDisplayed() {
-        return notificationOK.isDisplayed();
+        notificationOK.shouldBe(visible);
     }
 
     public void notificationErrorIsVisible() {
-        notificationError.shouldBe(visible, Duration.ofSeconds(15));
-    }
-
-    public boolean notificationErrorIsDisplayed() {
-        return notificationError.isDisplayed();
+        notificationError.shouldBe(visible);
     }
 
     public String getInputInvalidMessage() {

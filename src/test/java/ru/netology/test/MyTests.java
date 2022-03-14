@@ -3,14 +3,12 @@ package ru.netology.test;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import ru.netology.data.Card;
 import ru.netology.data.DBHelper;
 import ru.netology.data.DataGenerator;
-import ru.netology.page.BuyInCreditPage;
 import ru.netology.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -24,7 +22,6 @@ public class MyTests {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-//        DBHelper.cleanData();
     }
 
     @AfterAll
@@ -39,57 +36,58 @@ public class MyTests {
         DBHelper.cleanData();
     }
 
-//    OK
-    @org.junit.jupiter.api.Test
-    @DisplayName("1 approval with approved card")
+    @Test
+    @DisplayName("approval with approved card")
     public void shouldBuyWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
         buyByCardPage.fillForm(approvedCard);
+        buyByCardPage.notificationIsVisible();
         buyByCardPage.notificationOkIsVisible();
         assertEquals("APPROVED", DBHelper.getPaymentStatus());
     }
 
-    @org.junit.jupiter.api.Test
-    @DisplayName("2 declined with declined card")
-    public void shouldBeDeclinedBuyWithDeclinedCard() {
-        var dashboardPage = new DashboardPage();
-        var buyByCardPage = dashboardPage.openBuyByCardPage();
-        buyByCardPage.fillForm(declinedCard);
-//        buyByCardPage.notificationErrorIsVisible();
-        assertEquals("DECLINED", DBHelper.getPaymentStatus());
-    }
-
-//    OK
-    @org.junit.jupiter.api.Test
-    @DisplayName("3 credit approval with approved card")
+    @Test
+    @DisplayName("credit approval with approved card")
     public void shouldBuyInCreditWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyInCreditPage = dashboardPage.openBuyInCreditPage();
         buyInCreditPage.fillForm(approvedCard);
+        buyInCreditPage.notificationIsVisible();
         buyInCreditPage.notificationOkIsVisible();
         assertEquals("APPROVED", DBHelper.getCreditStatus());
     }
 
-    @org.junit.jupiter.api.Test
-    @DisplayName("4 credit declined with declined card")
+    @Test
+    @DisplayName("credit declined with declined card")
     public void shouldBeNotApprovedWhitDeclinedCard() {
-        DashboardPage dashboardPage = new DashboardPage();
-        BuyInCreditPage buyInCredit = dashboardPage.openBuyInCreditPage();
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
         buyInCredit.fillForm(declinedCard);
-//        buyInCredit.notificationErrorIsVisible();
+        buyInCredit.notificationIsVisible();
+        buyInCredit.notificationErrorIsVisible();
         assertEquals("DECLINED", DBHelper.getCreditStatus());
     }
 
-////    OK
-//    @ParameterizedTest
-//    @DisplayName("UI parameterized tests")
-//    @CsvFileSource(resources = "/Values.csv")
-//    void shouldShowWarning(String number, String month, String year, String owner, String cvc, String message) {
-//        Card incorrectValues = new Card(number, month, year, owner, cvc);
-//        DashboardPage dashboardPage = new DashboardPage();
-//        BuyByCardPage buyByCardPage = dashboardPage.openBuyByCardPage();
-//        buyByCardPage.fillForm(incorrectValues);
-//        assertEquals(buyByCardPage.getInputInvalidMessage(), message);
-//    }
+    @Test
+    @DisplayName("declined with declined card")
+    public void shouldBeDeclinedBuyWithDeclinedCard() {
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        buyByCardPage.fillForm(declinedCard);
+        buyByCardPage.notificationIsVisible();
+        buyByCardPage.notificationErrorIsVisible();
+        assertEquals("DECLINED", DBHelper.getPaymentStatus());
+    }
+
+    @ParameterizedTest
+    @DisplayName("UI parameterized tests buy by card")
+    @CsvFileSource(resources = "/Values.csv")
+    void shouldShowWarning(String number, String month, String year, String owner, String cvc, String message) {
+        var incorrectValues = new Card(number, month, year, owner, cvc);
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        buyByCardPage.fillForm(incorrectValues);
+        assertEquals(buyByCardPage.getInputInvalidMessage(), message);
+    }
 }

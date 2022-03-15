@@ -41,9 +41,10 @@ public class MyTests {
     public void shouldBuyWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
-        buyByCardPage.fillForm(approvedCard);
-        buyByCardPage.notificationIsVisible();
-        buyByCardPage.notificationOkIsVisible();
+        var form = buyByCardPage.form();
+        form.fillForm(approvedCard);
+        form.notificationIsVisible();
+        form.notificationOkIsVisible();
         assertEquals("APPROVED", DBHelper.getPaymentStatus());
     }
 
@@ -52,21 +53,11 @@ public class MyTests {
     public void shouldBuyInCreditWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyInCreditPage = dashboardPage.openBuyInCreditPage();
-        buyInCreditPage.fillForm(approvedCard);
-        buyInCreditPage.notificationIsVisible();
-        buyInCreditPage.notificationOkIsVisible();
+        var form = buyInCreditPage.form();
+        form.fillForm(approvedCard);
+        form.notificationIsVisible();
+        form.notificationOkIsVisible();
         assertEquals("APPROVED", DBHelper.getCreditStatus());
-    }
-
-    @Test
-    @DisplayName("credit declined with declined card")
-    public void shouldBeNotApprovedWhitDeclinedCard() {
-        var dashboardPage = new DashboardPage();
-        var buyInCredit = dashboardPage.openBuyInCreditPage();
-        buyInCredit.fillForm(declinedCard);
-        buyInCredit.notificationIsVisible();
-        buyInCredit.notificationErrorIsVisible();
-        assertEquals("DECLINED", DBHelper.getCreditStatus());
     }
 
     @Test
@@ -74,20 +65,46 @@ public class MyTests {
     public void shouldBeDeclinedBuyWithDeclinedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
-        buyByCardPage.fillForm(declinedCard);
-        buyByCardPage.notificationIsVisible();
-        buyByCardPage.notificationErrorIsVisible();
+        var form = buyByCardPage.form();
+        form.fillForm(declinedCard);
+        form.notificationIsVisible();
+        form.notificationErrorIsVisible();
         assertEquals("DECLINED", DBHelper.getPaymentStatus());
+    }
+
+    @Test
+    @DisplayName("credit declined with declined card")
+    public void shouldBeNotApprovedWhitDeclinedCard() {
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(declinedCard);
+        form.notificationIsVisible();
+        form.notificationErrorIsVisible();
+        assertEquals("DECLINED", DBHelper.getCreditStatus());
     }
 
     @ParameterizedTest
     @DisplayName("UI parameterized tests buy by card")
     @CsvFileSource(resources = "/Values.csv")
-    void shouldShowWarning(String number, String month, String year, String owner, String cvc, String message) {
+    void shouldShowWarningMassageInPageBuyByCard(String number, String month, String year, String owner, String cvc, String message) {
         var incorrectValues = new Card(number, month, year, owner, cvc);
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
-        buyByCardPage.fillForm(incorrectValues);
-        assertEquals(buyByCardPage.getInputInvalidMessage(), message);
+        var form = buyByCardPage.form();
+        form.fillForm(incorrectValues);
+        assertEquals(form.getInputInvalidMessage(), message);
+    }
+
+    @ParameterizedTest
+    @DisplayName("UI parameterized tests buy in credit")
+    @CsvFileSource(resources = "/Values.csv")
+    void shouldShowWarningMassageInPageBuyInCredit(String number, String month, String year, String owner, String cvc, String message) {
+        var incorrectValues = new Card(number, month, year, owner, cvc);
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(incorrectValues);
+        assertEquals(form.getInputInvalidMessage(), message);
     }
 }

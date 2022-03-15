@@ -13,11 +13,13 @@ import ru.netology.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MyTests {
 
     Card approvedCard = DataGenerator.getApprovedCard();
     Card declinedCard = DataGenerator.getDeclinedCard();
+    Card unknownCard = DataGenerator.getUnknownCard();
 
     @BeforeAll
     static void setUpAll() {
@@ -38,7 +40,7 @@ public class MyTests {
 
     @Test
     @DisplayName("approval with approved card")
-    public void shouldBuyWithApprovedCard() {
+    public void shouldBeApprovedWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
         var form = buyByCardPage.form();
@@ -50,7 +52,7 @@ public class MyTests {
 
     @Test
     @DisplayName("credit approval with approved card")
-    public void shouldBuyInCreditWithApprovedCard() {
+    public void shouldBeApprovedInCreditWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyInCreditPage = dashboardPage.openBuyInCreditPage();
         var form = buyInCreditPage.form();
@@ -62,7 +64,7 @@ public class MyTests {
 
     @Test
     @DisplayName("declined with declined card")
-    public void shouldBeDeclinedBuyWithDeclinedCard() {
+    public void shouldBeDeclinedInCreditWithDeclinedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
         var form = buyByCardPage.form();
@@ -74,7 +76,7 @@ public class MyTests {
 
     @Test
     @DisplayName("credit declined with declined card")
-    public void shouldBeNotApprovedWhitDeclinedCard() {
+    public void shouldBeDeclinedInCreditWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyInCredit = dashboardPage.openBuyInCreditPage();
         var form = buyInCredit.form();
@@ -82,6 +84,30 @@ public class MyTests {
         form.notificationIsVisible();
         form.notificationErrorIsVisible();
         assertEquals("DECLINED", DBHelper.getCreditStatus());
+    }
+
+    @Test
+    @DisplayName("declined with unknown card")
+    public void shouldNotBeApprovedWithUnknownCard() {
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
+        form.fillForm(unknownCard);
+        form.notificationIsVisible();
+        form.notificationErrorIsVisible();
+        assertNull(DBHelper.getPaymentStatus());
+    }
+
+    @Test
+    @DisplayName("credit declined with unknown card")
+    public void shouldNotBeApprovedInCreditWithUnknownCard() {
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(declinedCard);
+        form.notificationIsVisible();
+        form.notificationErrorIsVisible();
+        assertNull(DBHelper.getCreditStatus());
     }
 
     @ParameterizedTest

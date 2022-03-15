@@ -59,4 +59,13 @@ public class DataGenerator {
                 generateCvc()
         );
     }
+
+    public static Card getUnknownCard(){
+        return new Card("4444 4444 4444 4444",
+                generateMonth(),
+                generateYear(),
+                generateHolder(),
+                generateCvc()
+        );
+    }
 }

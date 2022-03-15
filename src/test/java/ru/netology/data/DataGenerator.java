@@ -7,6 +7,11 @@ import java.time.format.DateTimeFormatter;
 
 public class DataGenerator {
 
+    public static final String approvedCard = ("4444 4444 4444 4441");
+    public static final String declinedCard = ("4444 4444 4444 4442");
+    public static final String unknownCard = ("4444 4444 4444 4444");
+
+
     private DataGenerator() {
     }
 
@@ -30,7 +35,7 @@ public class DataGenerator {
     }
 
     public static Card getApprovedCard() {
-        return new Card("4444 4444 4444 4441",
+        return new Card(approvedCard,
                 generateMonth(),
                 generateYear(),
                 generateHolder(),
@@ -39,7 +44,7 @@ public class DataGenerator {
     }
 
     public static Card getDeclinedCard() {
-        return new Card("4444 4444 4444 4442",
+        return new Card(declinedCard,
                 generateMonth(),
                 generateYear(),
                 generateHolder(),
@@ -47,12 +52,31 @@ public class DataGenerator {
         );
     }
 
-    public static Card getUnknownCard(){
-        return new Card("4444 4444 4444 4444",
+    public static Card getUnknownCard() {
+        return new Card(unknownCard,
                 generateMonth(),
                 generateYear(),
                 generateHolder(),
                 generateCvc()
         );
     }
+
+    public static Card getApprovedCardWithWrongHolder() {
+        return new Card(approvedCard,
+                generateMonth(),
+                generateYear(),
+                "123456789Йцукенгшщзхъ!\"№;%:?*()123456789Йцукенгшщзхъ!\"№;%:?*()",
+                generateCvc()
+        );
+    }
+
+    public static Card getDeclinedCardWithWrongHolder() {
+        return new Card(declinedCard,
+                generateMonth(),
+                generateYear(),
+                "123456789Йцукенгшщзхъ!\"№;%:?*()123456789Йцукенгшщзхъ!\"№;%:?*()",
+                generateCvc()
+        );
+    }
+
 }

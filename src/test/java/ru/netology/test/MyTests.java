@@ -8,18 +8,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import ru.netology.data.Card;
 import ru.netology.data.DBHelper;
-import ru.netology.data.DataGenerator;
 import ru.netology.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static ru.netology.data.DataGenerator.*;
 
 public class MyTests {
 
-    Card approvedCard = DataGenerator.getApprovedCard();
-    Card declinedCard = DataGenerator.getDeclinedCard();
-    Card unknownCard = DataGenerator.getUnknownCard();
+    Card approvedCard = getApprovedCard();
+    Card declinedCard = getDeclinedCard();
+    Card unknownCard = getUnknownCard();
+    Card approvedCardWithWrongHolder = getApprovedCardWithWrongHolder();
+    Card declinedCardWithWrongHolder = getDeclinedCardWithWrongHolder();
 
     @BeforeAll
     static void setUpAll() {
@@ -39,7 +41,7 @@ public class MyTests {
     }
 
     @Test
-    @DisplayName("approval with approved card")
+    @DisplayName("+approval with approved card")
     public void shouldBeApprovedWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
@@ -51,7 +53,7 @@ public class MyTests {
     }
 
     @Test
-    @DisplayName("credit approval with approved card")
+    @DisplayName("+credit approval with approved card")
     public void shouldBeApprovedInCreditWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyInCreditPage = dashboardPage.openBuyInCreditPage();
@@ -63,7 +65,7 @@ public class MyTests {
     }
 
     @Test
-    @DisplayName("declined with declined card")
+    @DisplayName("-declined with declined card")
     public void shouldBeDeclinedInCreditWithDeclinedCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
@@ -75,7 +77,7 @@ public class MyTests {
     }
 
     @Test
-    @DisplayName("credit declined with declined card")
+    @DisplayName("-credit declined with declined card")
     public void shouldBeDeclinedInCreditWithApprovedCard() {
         var dashboardPage = new DashboardPage();
         var buyInCredit = dashboardPage.openBuyInCreditPage();
@@ -87,7 +89,7 @@ public class MyTests {
     }
 
     @Test
-    @DisplayName("declined with unknown card")
+    @DisplayName("+declined with unknown card")
     public void shouldNotBeApprovedWithUnknownCard() {
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
@@ -99,38 +101,82 @@ public class MyTests {
     }
 
     @Test
-    @DisplayName("credit declined with unknown card")
+    @DisplayName("+credit declined with unknown card")
     public void shouldNotBeApprovedInCreditWithUnknownCard() {
         var dashboardPage = new DashboardPage();
         var buyInCredit = dashboardPage.openBuyInCreditPage();
         var form = buyInCredit.form();
-        form.fillForm(declinedCard);
+        form.fillForm(unknownCard);
         form.notificationIsVisible();
         form.notificationErrorIsVisible();
         assertNull(DBHelper.getCreditStatus());
     }
 
-    @ParameterizedTest
-    @DisplayName("UI parameterized tests buy by card")
-    @CsvFileSource(resources = "/Values.csv")
-    void shouldShowWarningMassageInPageBuyByCard(String number, String month, String year, String owner, String cvc, String message) {
-        var incorrectValues = new Card(number, month, year, owner, cvc);
+    @Test
+    @DisplayName("-1")
+    public void shouldShowWarningMassageInPageBuyByCardWithWrongHolderAndApprovedCard(){
         var dashboardPage = new DashboardPage();
         var buyByCardPage = dashboardPage.openBuyByCardPage();
         var form = buyByCardPage.form();
-        form.fillForm(incorrectValues);
-        assertEquals(form.getInputInvalidMessage(), message);
+        form.fillForm(approvedCardWithWrongHolder);
+        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+        assertNull(DBHelper.getPaymentStatus());
     }
 
-    @ParameterizedTest
-    @DisplayName("UI parameterized tests buy in credit")
-    @CsvFileSource(resources = "/Values.csv")
-    void shouldShowWarningMassageInPageBuyInCredit(String number, String month, String year, String owner, String cvc, String message) {
-        var incorrectValues = new Card(number, month, year, owner, cvc);
+    @Test
+    @DisplayName("-2")
+    public void shouldShowWarningMassageInPageBuyInCreditWithWrongHolderAndApprovedCard(){
         var dashboardPage = new DashboardPage();
         var buyInCredit = dashboardPage.openBuyInCreditPage();
         var form = buyInCredit.form();
-        form.fillForm(incorrectValues);
-        assertEquals(form.getInputInvalidMessage(), message);
+        form.fillForm(approvedCardWithWrongHolder);
+        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+        assertNull(DBHelper.getCreditStatus());
     }
+
+    @Test
+    @DisplayName("-3")
+    public void shouldShowWarningMassageInPageBuyByCardWithWrongHolderAndDeclinedCard(){
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
+        form.fillForm(declinedCardWithWrongHolder);
+        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+        assertNull(DBHelper.getPaymentStatus());
+    }
+
+    @Test
+    @DisplayName("-4")
+    public void shouldShowWarningMassageInPageBuyInCreditWithWrongHolderAndDeclinedCard(){
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(declinedCardWithWrongHolder);
+        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+        assertNull(DBHelper.getCreditStatus());
+    }
+
+//    @ParameterizedTest
+//    @DisplayName("UI parameterized tests buy by card")
+//    @CsvFileSource(resources = "/Values.csv")
+//    void shouldShowWarningMassageInPageBuyByCard(String number, String month, String year, String owner, String cvc, String message) {
+//        var incorrectValues = new Card(number, month, year, owner, cvc);
+//        var dashboardPage = new DashboardPage();
+//        var buyByCardPage = dashboardPage.openBuyByCardPage();
+//        var form = buyByCardPage.form();
+//        form.fillForm(incorrectValues);
+//        assertEquals(form.getInputInvalidMessage(), message);
+//    }
+
+//    @ParameterizedTest
+//    @DisplayName("UI parameterized tests buy in credit")
+//    @CsvFileSource(resources = "/Values.csv")
+//    void shouldShowWarningMassageInPageBuyInCredit(String number, String month, String year, String owner, String cvc, String message) {
+//        var incorrectValues = new Card(number, month, year, owner, cvc);
+//        var dashboardPage = new DashboardPage();
+//        var buyInCredit = dashboardPage.openBuyInCreditPage();
+//        var form = buyInCredit.form();
+//        form.fillForm(incorrectValues);
+//        assertEquals(form.getInputInvalidMessage(), message);
+//    }
 }

@@ -45,6 +45,7 @@ public class Form {
     }
 
     public String getInputInvalidMessage() {
+        inputInvalid.shouldBe(visible);
         return inputInvalid.getText();
     }
 

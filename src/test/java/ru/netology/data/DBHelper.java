@@ -9,13 +9,13 @@ import java.sql.SQLException;
 
 public class DBHelper {
 
-    private static final String url = "jdbc:mysql://localhost:3306/app";
+//    private static final String url = "jdbc:mysql://localhost:3306/app";
+//    private static final String user = "app";
+//    private static final String password = "pass";
+
+    private static final String url = "jdbc:postgresql://localhost:5432/app";
     private static final String user = "app";
     private static final String password = "pass";
-
-//    private static String url = System.getProperty("db.url");
-//    private static String user = System.getProperty("db.login");
-//    private static String password = System.getProperty("db.password");
 
     @SneakyThrows
     public static void cleanData() {
@@ -30,7 +30,7 @@ public class DBHelper {
             runner.update(connection, cleanOrder);
             runner.update(connection, cleanPayment);
             runner.update(connection, cleanRequest);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -43,8 +43,7 @@ public class DBHelper {
                 var connection = DriverManager.getConnection(url, user, password);
         ) {
             status = runner.query(connection, query, new ScalarHandler<>());
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return status;

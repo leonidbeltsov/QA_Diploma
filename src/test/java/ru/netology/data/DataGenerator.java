@@ -18,11 +18,11 @@ public class DataGenerator {
     private static final Faker faker = new Faker();
 
     public static String generateMonth() {
-        return LocalDate.now().plusMonths(faker.number().numberBetween(1, 13)).format(DateTimeFormatter.ofPattern("MM"));
+        return LocalDate.now().plusMonths(faker.number().numberBetween(0, 13)).format(DateTimeFormatter.ofPattern("MM"));
     }
 
     public static String generateYear() {
-        return LocalDate.now().plusYears(faker.number().numberBetween(1, 4)).format(DateTimeFormatter.ofPattern("yy"));
+        return LocalDate.now().plusYears(faker.number().numberBetween(0, 4)).format(DateTimeFormatter.ofPattern("yy"));
     }
 
     public static String generateHolder() {
@@ -61,11 +61,29 @@ public class DataGenerator {
         );
     }
 
+    public static Card getCardWithWrongHolder() {
+        return new Card("1234 5678 9012 3456",
+                "12",
+                "25",
+                "Ц@рь Ле0н&д #1",
+                "111"
+        );
+    }
+
+//    public static Card getCardWithWrongHolder() {
+//        return new Card("1234 5678 9012 3456",
+//                generateMonth(),
+//                generateYear(),
+//                "Ц@рь Ле0н&д #1",
+//                generateCvc()
+//        );
+//    }
+
     public static Card getApprovedCardWithWrongHolder() {
         return new Card(approvedCard,
                 generateMonth(),
                 generateYear(),
-                "123456789Йцукенгшщзхъ!\"№;%:?*()123456789Йцукенгшщзхъ!\"№;%:?*()",
+                "Ц@рь Ле0н&д #1",
                 generateCvc()
         );
     }
@@ -74,7 +92,7 @@ public class DataGenerator {
         return new Card(declinedCard,
                 generateMonth(),
                 generateYear(),
-                "123456789Йцукенгшщзхъ!\"№;%:?*()123456789Йцукенгшщзхъ!\"№;%:?*()",
+                "Ц@рь Ле0н&д #1",
                 generateCvc()
         );
     }

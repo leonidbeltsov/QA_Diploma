@@ -4,24 +4,22 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import ru.netology.data.Card;
 import ru.netology.data.DBHelper;
 import ru.netology.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.netology.data.DataGenerator.*;
 
-public class MyTests {
+public class UITests {
 
     Card approvedCard = getApprovedCard();
     Card declinedCard = getDeclinedCard();
     Card unknownCard = getUnknownCard();
-    Card approvedCardWithWrongHolder = getApprovedCardWithWrongHolder();
-    Card declinedCardWithWrongHolder = getDeclinedCardWithWrongHolder();
+//    Card approvedCardWithWrongHolder = getApprovedCardWithWrongHolder();
+//    Card declinedCardWithWrongHolder = getDeclinedCardWithWrongHolder();
+    Card cardWithWrongHolder = getCardWithWrongHolder();
 
     @BeforeAll
     static void setUpAll() {
@@ -49,7 +47,6 @@ public class MyTests {
         form.fillForm(approvedCard);
         form.notificationIsVisible();
         form.notificationOkIsVisible();
-//        assertEquals("APPROVED", DBHelper.getPaymentStatus());
     }
 
     @Test
@@ -61,7 +58,6 @@ public class MyTests {
         form.fillForm(approvedCard);
         form.notificationIsVisible();
         form.notificationOkIsVisible();
-//        assertEquals("APPROVED", DBHelper.getCreditStatus());
     }
 
     @Test
@@ -73,7 +69,6 @@ public class MyTests {
         form.fillForm(declinedCard);
         form.notificationIsVisible();
         form.notificationErrorIsVisible();
-//        assertEquals("DECLINED", DBHelper.getPaymentStatus());
     }
 
     @Test
@@ -85,32 +80,49 @@ public class MyTests {
         form.fillForm(declinedCard);
         form.notificationIsVisible();
         form.notificationErrorIsVisible();
-//        assertEquals("DECLINED", DBHelper.getCreditStatus());
     }
 
-//    @Test
-//    @DisplayName("+declined with unknown card")
-//    public void shouldNotBeApprovedWithUnknownCard() {
-//        var dashboardPage = new DashboardPage();
-//        var buyByCardPage = dashboardPage.openBuyByCardPage();
-//        var form = buyByCardPage.form();
-//        form.fillForm(unknownCard);
-//        form.notificationIsVisible();
-//        form.notificationErrorIsVisible();
-//        assertNull(DBHelper.getPaymentStatus());
-//    }
+    @Test
+    @DisplayName("+declined with unknown card")
+    public void shouldShowNotificationWithErrorForPurchaseWithUnknownCard() {
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
+        form.fillForm(unknownCard);
+        form.notificationIsVisible();
+        form.notificationErrorIsVisible();
+    }
 
-//    @Test
-//    @DisplayName("+credit declined with unknown card")
-//    public void shouldNotBeApprovedInCreditWithUnknownCard() {
-//        var dashboardPage = new DashboardPage();
-//        var buyInCredit = dashboardPage.openBuyInCreditPage();
-//        var form = buyInCredit.form();
-//        form.fillForm(unknownCard);
-//        form.notificationIsVisible();
-//        form.notificationErrorIsVisible();
-//        assertNull(DBHelper.getCreditStatus());
-//    }
+    @Test
+    @DisplayName("+credit declined with unknown card")
+    public void shouldNotBeApprovedInCreditWithUnknownCard() {
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(unknownCard);
+        form.notificationIsVisible();
+        form.notificationErrorIsVisible();
+    }
+
+    @Test
+    @DisplayName("-show holder warning in buy page")
+    public void shouldShowWarningMassageInPageBuyByCardWithWrongHolder() {
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
+        form.fillForm(cardWithWrongHolder);
+        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+    }
+
+    @Test
+    @DisplayName("-show holder warning in credit page")
+    public void shouldShowWarningMassageInPageBuyInCreditWithWrongHolder() {
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(cardWithWrongHolder);
+        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+    }
 
 //    @Test
 //    @DisplayName("-1")
@@ -120,7 +132,6 @@ public class MyTests {
 //        var form = buyByCardPage.form();
 //        form.fillForm(approvedCardWithWrongHolder);
 //        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
-//        assertNull(DBHelper.getPaymentStatus());
 //    }
 
 //    @Test
@@ -131,7 +142,6 @@ public class MyTests {
 //        var form = buyInCredit.form();
 //        form.fillForm(approvedCardWithWrongHolder);
 //        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
-//        assertNull(DBHelper.getCreditStatus());
 //    }
 
 //    @Test
@@ -142,7 +152,6 @@ public class MyTests {
 //        var form = buyByCardPage.form();
 //        form.fillForm(declinedCardWithWrongHolder);
 //        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
-//        assertNull(DBHelper.getPaymentStatus());
 //    }
 
 //    @Test
@@ -153,7 +162,6 @@ public class MyTests {
 //        var form = buyInCredit.form();
 //        form.fillForm(declinedCardWithWrongHolder);
 //        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
-//        assertNull(DBHelper.getCreditStatus());
 //    }
 
 //    @ParameterizedTest

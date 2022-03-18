@@ -9,11 +9,9 @@ import java.sql.SQLException;
 
 public class DBHelper {
 
-//    private static final String url = "jdbc:mysql://localhost:3306/app";
-//    private static final String user = "app";
-//    private static final String password = "pass";
-
-    private static final String url = "jdbc:postgresql://localhost:5432/app";
+//    private static final String url = System.getProperty("db.url");
+    private static final String url = "jdbc:mysql://localhost:3306/app";
+//    private static final String url = "jdbc:postgresql://localhost:5432/app";
     private static final String user = "app";
     private static final String password = "pass";
 
@@ -25,7 +23,7 @@ public class DBHelper {
         var cleanRequest = "DELETE FROM credit_request_entity";
 
         try (
-                var connection = DriverManager.getConnection(url, user, password);
+                var connection = DriverManager.getConnection(url, user, password)
         ) {
             runner.update(connection, cleanOrder);
             runner.update(connection, cleanPayment);
@@ -40,7 +38,7 @@ public class DBHelper {
         var runner = new QueryRunner();
         var status = "";
         try (
-                var connection = DriverManager.getConnection(url, user, password);
+                var connection = DriverManager.getConnection(url, user, password)
         ) {
             status = runner.query(connection, query, new ScalarHandler<>());
         } catch (SQLException e) {

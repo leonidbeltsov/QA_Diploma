@@ -156,27 +156,27 @@ public class MyTests {
         assertNull(DBHelper.getCreditStatus());
     }
 
-    @ParameterizedTest
-    @DisplayName("UI parameterized tests buy by card")
-    @CsvFileSource(resources = "/Values.csv")
-    void shouldShowWarningMassageInPageBuyByCard(String number, String month, String year, String owner, String cvc, String message) {
-        var incorrectValues = new Card(number, month, year, owner, cvc);
-        var dashboardPage = new DashboardPage();
-        var buyByCardPage = dashboardPage.openBuyByCardPage();
-        var form = buyByCardPage.form();
-        form.fillForm(incorrectValues);
-        assertEquals(form.getInputInvalidMessage(), message);
-    }
+//    @ParameterizedTest
+//    @DisplayName("UI parameterized tests buy by card")
+//    @CsvFileSource(resources = "/Values.csv")
+//    void shouldShowWarningMassageInPageBuyByCard(String number, String month, String year, String owner, String cvc, String message) {
+//        var incorrectValues = new Card(number, month, year, owner, cvc);
+//        var dashboardPage = new DashboardPage();
+//        var buyByCardPage = dashboardPage.openBuyByCardPage();
+//        var form = buyByCardPage.form();
+//        form.fillForm(incorrectValues);
+//        assertEquals(form.getInputInvalidMessage(), message);
+//    }
 
-    @ParameterizedTest
-    @DisplayName("UI parameterized tests buy in credit")
-    @CsvFileSource(resources = "/Values.csv")
-    void shouldShowWarningMassageInPageBuyInCredit(String number, String month, String year, String owner, String cvc, String message) {
-        var incorrectValues = new Card(number, month, year, owner, cvc);
-        var dashboardPage = new DashboardPage();
-        var buyInCredit = dashboardPage.openBuyInCreditPage();
-        var form = buyInCredit.form();
-        form.fillForm(incorrectValues);
-        assertEquals(form.getInputInvalidMessage(), message);
-    }
+//    @ParameterizedTest
+//    @DisplayName("UI parameterized tests buy in credit")
+//    @CsvFileSource(resources = "/Values.csv")
+//    void shouldShowWarningMassageInPageBuyInCredit(String number, String month, String year, String owner, String cvc, String message) {
+//        var incorrectValues = new Card(number, month, year, owner, cvc);
+//        var dashboardPage = new DashboardPage();
+//        var buyInCredit = dashboardPage.openBuyInCreditPage();
+//        var form = buyInCredit.form();
+//        form.fillForm(incorrectValues);
+//        assertEquals(form.getInputInvalidMessage(), message);
+//    }
 }

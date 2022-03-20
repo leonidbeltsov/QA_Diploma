@@ -33,8 +33,39 @@ public class DBHelper {
         }
     }
 
+    // Получаем последний payment_id из таблицы order_entity
     @SneakyThrows
-    public static String getStatus(String query) {
+    private static String getPaymentID() {
+        var runner = new QueryRunner();
+        var paymentID = "";
+        try (
+                var connection = DriverManager.getConnection(url, user, password)
+        ) {
+            paymentID = runner.query(connection, "SELECT payment_id FROM order_entity ORDER BY created DESC LIMIT 1", new ScalarHandler<>());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(paymentID);
+        return paymentID;
+    }
+
+    @SneakyThrows
+    private static String getCreditID() {
+        var runner = new QueryRunner();
+        var paymentID = "";
+        try (
+                var connection = DriverManager.getConnection(url, user, password)
+        ) {
+            paymentID = runner.query(connection, "SELECT credit_id FROM order_entity ORDER BY created DESC LIMIT 1", new ScalarHandler<>());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(paymentID);
+        return paymentID;
+    }
+
+    @SneakyThrows
+    private static String getStatus(String query) {
         var runner = new QueryRunner();
         var status = "";
         try (
@@ -49,13 +80,19 @@ public class DBHelper {
 
     @SneakyThrows
     public static String getPaymentStatus() {
-        var statusSQL = "SELECT status FROM payment_entity";
+        var statusSQL = ("SELECT status FROM payment_entity" + " WHERE transaction_id = " + "\"" + getPaymentID() + "\"");
         return getStatus(statusSQL);
     }
 
     @SneakyThrows
     public static String getCreditStatus() {
-        var statusSQL = "SELECT status FROM credit_request_entity";
+        var statusSQL = ("SELECT status FROM credit_request_entity" + " WHERE bank_id = " + "\"" + getCreditID() + "\"");
         return getStatus(statusSQL);
     }
+
+//    @SneakyThrows
+//    public static String getCreditStatus() {
+//        var statusSQL = ("SELECT status FROM credit_request_entity" + " WHERE bank_id = " + "\"" + getPaymentID() + "\"");
+//        return getStatus(statusSQL);
+//    }
 }

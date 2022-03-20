@@ -9,13 +9,17 @@ public class DataGenerator {
 
     public static final String approvedCard = ("4444 4444 4444 4441");
     public static final String declinedCard = ("4444 4444 4444 4442");
-    public static final String unknownCard = ("4444 4444 4444 4444");
+    public static final String wrongHolder = ("Ц@рь Ле0н&д #1");
 
 
     private DataGenerator() {
     }
 
     private static final Faker faker = new Faker();
+
+    public static String generateUnknownCard() {
+        return faker.numerify("#### #### #### ####");
+    }
 
     public static String generateMonth() {
         return LocalDate.now().plusMonths(faker.number().numberBetween(0, 13)).format(DateTimeFormatter.ofPattern("MM"));
@@ -53,7 +57,7 @@ public class DataGenerator {
     }
 
     public static Card getUnknownCard() {
-        return new Card(unknownCard,
+        return new Card(generateUnknownCard(),
                 generateMonth(),
                 generateYear(),
                 generateHolder(),
@@ -62,28 +66,19 @@ public class DataGenerator {
     }
 
     public static Card getCardWithWrongHolder() {
-        return new Card("1234 5678 9012 3456",
-                "12",
-                "25",
-                "Ц@рь Ле0н&д #1",
-                "111"
+        return new Card(generateUnknownCard(),
+                generateMonth(),
+                generateYear(),
+                wrongHolder,
+                generateCvc()
         );
     }
-
-//    public static Card getCardWithWrongHolder() {
-//        return new Card("1234 5678 9012 3456",
-//                generateMonth(),
-//                generateYear(),
-//                "Ц@рь Ле0н&д #1",
-//                generateCvc()
-//        );
-//    }
 
     public static Card getApprovedCardWithWrongHolder() {
         return new Card(approvedCard,
                 generateMonth(),
                 generateYear(),
-                "Ц@рь Ле0н&д #1",
+                wrongHolder,
                 generateCvc()
         );
     }
@@ -92,9 +87,8 @@ public class DataGenerator {
         return new Card(declinedCard,
                 generateMonth(),
                 generateYear(),
-                "Ц@рь Ле0н&д #1",
+                wrongHolder,
                 generateCvc()
         );
     }
-
 }

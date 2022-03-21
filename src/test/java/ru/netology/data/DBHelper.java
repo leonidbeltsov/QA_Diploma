@@ -9,9 +9,9 @@ import java.sql.SQLException;
 
 public class DBHelper {
 
-//    private static final String url = System.getProperty("db.url");
+    //    private static final String url = System.getProperty("db.url");
     private static final String url = "jdbc:mysql://localhost:3306/app";
-//    private static final String url = "jdbc:postgresql://localhost:5432/app";
+    //    private static final String url = "jdbc:postgresql://localhost:5432/app";
     private static final String user = "app";
     private static final String password = "pass";
 
@@ -89,10 +89,4 @@ public class DBHelper {
         var statusSQL = ("SELECT status FROM credit_request_entity" + " WHERE bank_id = " + "\"" + getCreditID() + "\"");
         return getStatus(statusSQL);
     }
-
-//    @SneakyThrows
-//    public static String getCreditStatus() {
-//        var statusSQL = ("SELECT status FROM credit_request_entity" + " WHERE bank_id = " + "\"" + getPaymentID() + "\"");
-//        return getStatus(statusSQL);
-//    }
 }

@@ -10,6 +10,8 @@ import ru.netology.data.Card;
 import ru.netology.data.DBHelper;
 import ru.netology.page.DashboardPage;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -92,10 +94,10 @@ public class MyTests {
         form.notificationErrorIsVisible();
         form.closeNotificationError();
         form.notificationOkIsHidden();
-//        assertNull(DBHelper.getPaymentStatus());
+        assertEquals("DECLINED", DBHelper.getPaymentStatus());
     }
 
-    // Оба уведомления в кредит с неизвестной картой
+    // Оба уведомления с неизвестной картой в кредит
     @Test
     @DisplayName("-credit declined with unknown card")
     public void shouldNotBeApprovedInCreditWithUnknownCard() {
@@ -106,7 +108,7 @@ public class MyTests {
         form.notificationErrorIsVisible();
         form.closeNotificationError();
         form.notificationOkIsHidden();
-//        assertNull(DBHelper.getCreditStatus());
+        assertEquals("DECLINED", DBHelper.getCreditStatus());
     }
 
     // Отсутствует предупреждение и отправка формы с кривым именем одобренной картой
@@ -137,31 +139,63 @@ public class MyTests {
         assertNull(DBHelper.getCreditStatus());
     }
 
-    // Отсутствует предупреждение и отправка формы с кривым именем отклоненной картой
+    // Сообщение об ошибке Владельца при пустом CVV
     @Test
-    @DisplayName("-warning wrong holder with declined card")
-    public void shouldShowWarningMassageUnderFieldCardHolderInPageBuyByCardWithWrongHolderAndDeclinedCard() {
-        var dashboardPage = new DashboardPage();
-        var buyByCardPage = dashboardPage.openBuyByCardPage();
-        var form = buyByCardPage.form();
-        form.fillForm(getApprovedCardWithWrongHolder());
-        form.inputInvalid();
-//        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
-        assertNull(DBHelper.getPaymentStatus());
-        assertNull(DBHelper.getCreditStatus());
-    }
-
-    // Отсутствует предупреждение и отправка формы с кривым именем и отклоненной картой в кредит
-    @Test
-    @DisplayName("-warning wrong holder with declined card in credit")
-    public void shouldShowWarningMassageUnderFieldCardHolderInPageBuyInCreditWithWrongHolderAndDeclinedCard() {
+    @DisplayName("-warning under holder with empty cvv")
+    public void shouldNotShowWarningMassageUnderFieldCardHolderInBuyByCardPageWithEmptyCVV() {
         var dashboardPage = new DashboardPage();
         var buyInCredit = dashboardPage.openBuyInCreditPage();
         var form = buyInCredit.form();
-        form.fillForm(getDeclinedCardWithWrongHolder());
+        form.fillForm(getCardWithCvvEmpty());
+        form.cvvBadFormatError();
+        form.cardholderWarningHidden();
+    }
+
+    // Сообщение об ошибке Владельца при пустом CVV в кредит
+    @Test
+    @DisplayName("-warning under holder with empty cvv in credit")
+    public void shouldNotShowWarningMassageUnderFieldCardHolderInBuyInCreditPageWithEmptyCVV() {
+        var dashboardPage = new DashboardPage();
+        var buyInCredit = dashboardPage.openBuyInCreditPage();
+        var form = buyInCredit.form();
+        form.fillForm(getCardWithCvvEmpty());
+        form.cvvBadFormatError();
+        form.cardholderWarningHidden();
+    }
+
+    // Отправка формы с нулевым месяцем
+    @Test
+    @DisplayName("-warning under month")
+    public void shouldShowWarningMassageUnderFieldMonthInBuyByCardPageWithZeroMonth() {
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
+        form.fillForm(getCardWithZeroMonth());
         form.inputInvalid();
-//        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
+        //Время для отправки данных в базу данных, в секундах:
+        try {
+            TimeUnit.SECONDS.sleep(15);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertNull(DBHelper.getPaymentStatus());
+    }
+
+    // Отправка формы с нулевым месяцем в кредит
+    @Test
+    @DisplayName("-warning under month")
+    public void shouldShowWarningMassageUnderFieldMonthInBuyInCreditPageWithZeroMonth() {
+        var dashboardPage = new DashboardPage();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
+        form.fillForm(getCardWithZeroMonth());
+        form.inputInvalid();
+        //Время для отправки данных в базу данных, в секундах:
+        try {
+            TimeUnit.SECONDS.sleep(15);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertNull(DBHelper.getCreditStatus());
     }
 

@@ -26,7 +26,7 @@ public class DataGenerator {
     }
 
     public static String generateYear() {
-        return LocalDate.now().plusYears(faker.number().numberBetween(0, 4)).format(DateTimeFormatter.ofPattern("yy"));
+        return LocalDate.now().plusYears(faker.number().numberBetween(1, 4)).format(DateTimeFormatter.ofPattern("yy"));
     }
 
     public static String generateHolder() {
@@ -65,15 +65,6 @@ public class DataGenerator {
         );
     }
 
-    public static Card getCardWithWrongHolder() {
-        return new Card(generateUnknownCard(),
-                generateMonth(),
-                generateYear(),
-                wrongHolder,
-                generateCvc()
-        );
-    }
-
     public static Card getApprovedCardWithWrongHolder() {
         return new Card(approvedCard,
                 generateMonth(),
@@ -88,6 +79,24 @@ public class DataGenerator {
                 generateMonth(),
                 generateYear(),
                 wrongHolder,
+                generateCvc()
+        );
+    }
+
+    public static Card getCardWithCvvEmpty(){
+        return new Card(generateUnknownCard(),
+                generateMonth(),
+                generateYear(),
+                generateHolder(),
+                ""
+        );
+    }
+
+    public static Card getCardWithZeroMonth(){
+        return new Card(approvedCard,
+                "00",
+                generateYear(),
+                generateHolder(),
                 generateCvc()
         );
     }

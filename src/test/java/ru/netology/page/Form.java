@@ -15,12 +15,15 @@ public class Form {
     private final SelenideElement month = $(byText("Месяц")).parent().$(".input__control");
     private final SelenideElement year = $(byText("Год")).parent().$(".input__control");
     private final SelenideElement cardholder = $(byText("Владелец")).parent().$(".input__control");
+    private final SelenideElement cardholderWarning = $$(".input__sub").find(text("Поле обязательно для заполнения"));
     private final SelenideElement cvv = $(byText("CVC/CVV")).parent().$(".input__control");
+    private final SelenideElement cvvBadFormatError = cvv.parent().parent().$(byText("Неверный формат"));
     private final SelenideElement continueButton = $$("button").find(exactText("Продолжить"));
     private final SelenideElement notificationOK = $(".notification_status_ok");
     private final SelenideElement notificationError = $(".notification_status_error");
     private final SelenideElement notificationErrorCloseButton = $(".notification_status_error").$(".notification__closer");
     private final SelenideElement inputInvalid = $(".input__sub");
+
     public void notificationOkIsVisible() {
         notificationOK.shouldBe(visible, Duration.ofSeconds(15));
     }
@@ -46,7 +49,7 @@ public class Form {
         notificationErrorCloseButton.click();
     }
 
-    public void inputInvalid () {
+    public void inputInvalid() {
         inputInvalid.shouldBe(visible);
     }
 
@@ -54,4 +57,11 @@ public class Form {
         return inputInvalid.getText();
     }
 
+    public void cardholderWarningHidden() {
+        cardholderWarning.shouldBe(hidden);
+    }
+
+    public void cvvBadFormatError() {
+        cvvBadFormatError.shouldBe(visible);
+    }
 }

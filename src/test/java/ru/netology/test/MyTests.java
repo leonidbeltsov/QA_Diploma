@@ -144,8 +144,8 @@ public class MyTests {
     @DisplayName("-warning under holder with empty cvv")
     public void shouldNotShowWarningMassageUnderFieldCardHolderInBuyByCardPageWithEmptyCVV() {
         var dashboardPage = new DashboardPage();
-        var buyInCredit = dashboardPage.openBuyInCreditPage();
-        var form = buyInCredit.form();
+        var buyByCardPage = dashboardPage.openBuyByCardPage();
+        var form = buyByCardPage.form();
         form.fillForm(getCardWithCvvEmpty());
         form.cvvBadFormatError();
         form.cardholderWarningHidden();

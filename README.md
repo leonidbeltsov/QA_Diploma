@@ -1,8 +1,8 @@
 # Дипломный проект профессии «Тестировщик»
 ## Документация
 - [План автоматизации тестирования](https://github.com/leonidbeltsov/QA_Diploma/blob/master/docs/Plan.md);
-- [Отчёт по итогам автоматизированного тестирования]();
-- [Отчёт по итогам автоматизации]().
+- [Отчёт по итогам автоматизированного тестирования](https://github.com/leonidbeltsov/QA_Diploma/blob/master/docs/Report.md);
+- [Отчёт по итогам автоматизации](https://github.com/leonidbeltsov/QA_Diploma/blob/master/docs/Summary.md).
 
 ## Инструкция по запуску
 1. **Клонировать проект из репозитория**

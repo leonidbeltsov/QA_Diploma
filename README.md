@@ -30,6 +30,6 @@
         - Раскомментировать строку `private static final String url = "jdbc:postgresql://localhost:5432/app";`
         - Открыть новое окно терминала и выполнить команду `java -jar ./artifacts/aqa-shop.jar`
 5. **Запустить тесты**
-   - Открыть новое окно терминала и выполнить команду `gradlew clean test`
+   - Открыть новое окно терминала и выполнить команду `./gradlew clean test`
 6. **Сформировать отчёт**
     - Выполнить в терминале команду `gradlew allureReport`, затем команду `gradlewServe`

@@ -50,7 +50,7 @@ public class Form {
     }
 
     public void inputInvalid() {
-        inputInvalid.shouldBe(visible);
+        inputInvalid.shouldBe(visible, Duration.ofSeconds(15));
     }
 
     public String getInputInvalidMessage() {

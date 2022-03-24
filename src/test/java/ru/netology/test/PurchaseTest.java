@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.netology.data.DataGenerator.*;
 
-public class MyTests {
+public class PurchaseTest {
 
     @BeforeAll
     static void setUpAll() {
@@ -120,7 +120,6 @@ public class MyTests {
         var form = buyByCardPage.form();
         form.fillForm(getApprovedCardWithWrongHolder());
         form.inputInvalid();
-//        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
         assertNull(DBHelper.getPaymentStatus());
         assertNull(DBHelper.getCreditStatus());
     }
@@ -134,7 +133,6 @@ public class MyTests {
         var form = buyInCredit.form();
         form.fillForm(getDeclinedCardWithWrongHolder());
         form.inputInvalid();
-//        assertEquals(form.getInputInvalidMessage(), "Неверный формат");
         assertNull(DBHelper.getPaymentStatus());
         assertNull(DBHelper.getCreditStatus());
     }
@@ -190,12 +188,6 @@ public class MyTests {
         var form = buyByCardPage.form();
         form.fillForm(getCardWithZeroMonth());
         form.inputInvalid();
-        //Время для отправки данных в базу данных, в секундах:
-        try {
-            TimeUnit.SECONDS.sleep(15);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         assertNull(DBHelper.getCreditStatus());
     }
 

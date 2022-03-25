@@ -21,7 +21,7 @@
 4. **Запустить приложение**
     1. Запуск SUT для работы с MySQL
         - Открыть новое окно терминала и выполнить команду `java -jar ./artifacts/aqa-shop.jar`
-    2. Запуск с подключением к PostgreSQL
+    2. Запуск с подключением к PostgresSQL
         - Открыть файл application.properties
         - Закомментировать строку `spring.datasource.url=jdbc:mysql://localhost:3306/app`
         - Раскомментировать строку `spring.datasource.url=jdbc:postgresql://localhost:5432/app`

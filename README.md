@@ -18,18 +18,20 @@
    - Container node              Started
    - Container mysql             Started
    ```
+   - Проверить запуск приложениея открыв в браузере страницу [http://localhost:8080/](http://localhost:8080/)
 4. **Запустить приложение**
-    1. Запуск SUT для работы с MySQL
-        - Открыть новое окно терминала и выполнить команду `java -jar ./artifacts/aqa-shop.jar`
-    2. Запуск с подключением к PostgresSQL
-        - Открыть файл application.properties
-        - Закомментировать строку `spring.datasource.url=jdbc:mysql://localhost:3306/app`
-        - Раскомментировать строку `spring.datasource.url=jdbc:postgresql://localhost:5432/app`
-        - Открыть файл DBHelper.java
-        - Закомментировать строку `private static final String url = "jdbc:mysql://localhost:3306/app";`
-        - Раскомментировать строку `private static final String url = "jdbc:postgresql://localhost:5432/app";`
-        - Открыть новое окно терминала и выполнить команду `java -jar ./artifacts/aqa-shop.jar`
-5. **Запустить тесты**
-   - Открыть новое окно терминала и выполнить команду `./gradlew clean test`
-6. **Сформировать отчёт**
-    - Выполнить в терминале команду `./gradlew allureServe`
+
+    В зависимости о выбранной БД выполнить соотвествующую команду в терминале IDE:
+
+   - для MySQL:`java "-Dspring.datasource.url=jdbc:mysql://localhost:3306/app" -jar ./artifacts/aqa-shop.jar`
+   - для Postgres:`java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar ./artifacts/aqa-shop.jar`
+   
+6. **Запустить тесты**
+
+   В зависимости о выбранной БД выполнить соотвествующую команду в терминале IDE:
+
+    - для MySQL:`./gradlew clean test -Durl=jdbc:mysql://localhost:3306/app -Duser=app -Dpassword=pass`
+    - для Postgres:`./gradlew clean test -Durl=jdbc:postgresql://localhost:5432/app -Duser=app -Dpassword=pass`
+
+7. **Сформировать отчёт**
+    - Открыть новую вкладку терминала IDE и выполнить команду `./gradlew allureServe`

@@ -10,8 +10,6 @@ import java.sql.SQLException;
 public class DBHelper {
 
     static String url = System.getProperty("db.url");
-//    private static final String url = "jdbc:mysql://localhost:3306/app";
-//    private static final String url = "jdbc:postgresql://localhost:5432/app";
     static String user = System.getProperty("db.user");
     static String password = System.getProperty("db.password");
 

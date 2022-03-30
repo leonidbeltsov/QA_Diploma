@@ -23,6 +23,11 @@ public class Form {
     private final SelenideElement notificationError = $(".notification_status_error");
     private final SelenideElement notificationErrorCloseButton = $(".notification_status_error").$(".notification__closer");
     private final SelenideElement inputInvalid = $(".input__sub");
+    private final SelenideElement notification = $(".notification__title");
+
+    public void notificationIsVisible() {
+        notification.shouldBe(visible, Duration.ofSeconds(15));
+    }
 
     public void notificationOkIsVisible() {
         notificationOK.shouldBe(visible, Duration.ofSeconds(15));

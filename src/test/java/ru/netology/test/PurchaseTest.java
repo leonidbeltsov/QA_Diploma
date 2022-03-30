@@ -43,6 +43,7 @@ public class PurchaseTest {
         var buyByCardPage = dashboardPage.openBuyByCardPage();
         var form = buyByCardPage.form();
         form.fillForm(getApprovedCard());
+        form.notificationIsVisible();
         form.notificationOkIsVisible();
         assertEquals("APPROVED", DBHelper.getPaymentStatus());
     }

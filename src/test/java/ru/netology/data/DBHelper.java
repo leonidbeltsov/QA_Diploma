@@ -43,7 +43,6 @@ public class DBHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(paymentID);
         return paymentID;
     }
 
@@ -58,7 +57,6 @@ public class DBHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(paymentID);
         return paymentID;
     }
 
@@ -78,13 +76,13 @@ public class DBHelper {
 
     @SneakyThrows
     public static String getPaymentStatus() {
-        var statusSQL = ("SELECT status FROM payment_entity" + " WHERE transaction_id = " + "\"" + getPaymentID() + "\"");
+        var statusSQL = ("SELECT status FROM payment_entity" + " WHERE transaction_id = " + "'" + getPaymentID() + "'");
         return getStatus(statusSQL);
     }
 
     @SneakyThrows
     public static String getCreditStatus() {
-        var statusSQL = ("SELECT status FROM credit_request_entity" + " WHERE bank_id = " + "\"" + getCreditID() + "\"");
+        var statusSQL = ("SELECT status FROM credit_request_entity" + " WHERE bank_id = " + "'" + getCreditID() + "'");
         return getStatus(statusSQL);
     }
 }

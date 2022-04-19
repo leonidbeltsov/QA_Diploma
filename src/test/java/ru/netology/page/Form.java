@@ -12,6 +12,7 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class Form {
     private final SelenideElement cardNumber = $(byText("Номер карты")).parent().$(".input__control");
+    private final SelenideElement numberCardErrorMessage = $(byText("Номер карты")).parent().$(".input__sub");
     private final SelenideElement month = $(byText("Месяц")).parent().$(".input__control");
     private final SelenideElement year = $(byText("Год")).parent().$(".input__control");
     private final SelenideElement cardholder = $(byText("Владелец")).parent().$(".input__control");
@@ -63,5 +64,21 @@ public class Form {
 
     public void cvvBadFormatError() {
         cvvBadFormatError.shouldBe(visible);
+    }
+
+
+
+    // Поле Номер карты И сообщение об ошибке при вводе конкретно под ним
+    // Видимость сообщения об ошибке под полем ввода номера карты
+    public void messageUnderCardNumberFieldIsVisible() {
+        numberCardErrorMessage.shouldBe(visible);
+    }
+    // Не видимость сообщения об ошибке под полем ввода номера карты
+    public void messageUnderCardNumberFieldIsHidden() {
+        numberCardErrorMessage.shouldBe(hidden);
+    }
+    // Получение текста сообщения об ошибке под полем ввода номера карты
+    public String getMessageUnderCardNumberField() {
+        return numberCardErrorMessage.getText();
     }
 }

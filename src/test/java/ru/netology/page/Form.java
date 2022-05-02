@@ -12,6 +12,7 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class Form {
     private final SelenideElement cardNumber = $(byText("Номер карты")).parent().$(".input__control");
+    // Сообщение об ошибке под полем "Номер карты"
     private final SelenideElement numberCardErrorMessage = $(byText("Номер карты")).parent().$(".input__sub");
     private final SelenideElement month = $(byText("Месяц")).parent().$(".input__control");
     private final SelenideElement year = $(byText("Год")).parent().$(".input__control");
@@ -68,7 +69,8 @@ public class Form {
 
 
 
-    // Поле Номер карты И сообщение об ошибке при вводе конкретно под ним
+    // Поле Номер карты и сообщение об ошибке при вводе конкретно под ним
+
     // Видимость сообщения об ошибке под полем ввода номера карты
     public void messageUnderCardNumberFieldIsVisible() {
         numberCardErrorMessage.shouldBe(visible);
@@ -80,5 +82,9 @@ public class Form {
     // Получение текста сообщения об ошибке под полем ввода номера карты
     public String getMessageUnderCardNumberField() {
         return numberCardErrorMessage.getText();
+    }
+    // Сообщение об ошибке под полем "Номер карты" должно содержать текст (message) и быть видимо
+    public void messageUnderCardNumberField(String message) {
+        numberCardErrorMessage.shouldHave(text(message)).shouldBe(visible);
     }
 }

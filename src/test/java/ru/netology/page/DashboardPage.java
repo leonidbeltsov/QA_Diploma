@@ -6,11 +6,11 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class DashboardPage {
-    private SelenideElement heading = $$("h2").find(text("Путешествие дня"));
-    private SelenideElement buyButton = $$("button").find(exactText("Купить"));
-    private SelenideElement creditButton = $$("button").find(exactText("Купить в кредит"));
+    private final SelenideElement buyButton = $$("button").find(exactText("Купить"));
+    private final SelenideElement creditButton = $$("button").find(exactText("Купить в кредит"));
 
     public DashboardPage() {
+        SelenideElement heading = $$("h2").find(text("Путешествие дня"));
         heading.shouldBe(visible);
     }
 
